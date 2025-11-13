@@ -15,7 +15,7 @@
         </svg>
         Volver
     </a>
-    <h1 class="titulo-header">Modelos 3D - MUNDO 3D</h1>
+    <h1 class="titulo-header" id="titulo-secreto">Modelos 3D - MUNDO 3D</h1>
 
     <div class="cart-container">
         <button id="cart-button" class="boton-carrito">
@@ -82,6 +82,47 @@
                 <strong>Total: $<span id="cart-total-price">0</span> ARS</strong>
             </div>
             <button class="boton-vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalCheckout" class="modal-modelo-3d">
+    <div class="modal-contenido" style="max-width:500px;">
+        <div class="modal-encabezado">
+            <h2>Complete sus datos</h2>
+            <button class="cerrar-modal" onclick="cerrarCheckout()">X</button>
+        </div>
+        <div class="modal-cuerpo" style="padding:25px;">
+            <input type="text" id="inputNombre" placeholder="Nombre" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
+            <input type="text" id="inputApellido" placeholder="Apellido" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
+            <input type="text" id="inputTelefono" placeholder="Teléfono (ej: 1123456789)" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
+            <input type="text" id="inputCP" placeholder="Código Postal" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
+            <input type="text" id="inputLocalidad" placeholder="Localidad" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
+            <button onclick="finalizarCompra()" style="width:100%;background:#006eff;color:white;padding:14px;border:none;border-radius:8px;margin-top:15px;font-size:1.1rem;cursor:pointer;">
+                Confirmar Pedido
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="modalPassword" class="modal-modelo-3d">
+    <div class="modal-contenido" style="max-width:400px;">
+        <div class="modal-encabezado"><h2>Acceso Admin</h2></div>
+        <div class="modal-cuerpo" style="padding:30px;text-align:center;">
+            <input type="password" id="adminPass" placeholder="Contraseña" style="width:80%;padding:12px;font-size:1.2rem;text-align:center;">
+            <button onclick="verificarPassword()" style="margin-top:15px;padding:12px 25px;background:#170942;color:white;border:none;border-radius:8px;cursor:pointer;">Entrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalHistorial" class="modal-modelo-3d">
+    <div class="modal-contenido" style="max-width:900px;">
+        <div class="modal-encabezado">
+            <h2>Historial de Pedidos</h2>
+            <button class="cerrar-modal" onclick="document.getElementById('modalHistorial').classList.remove('abierto')">X</button>
+        </div>
+        <div class="modal-cuerpo" style="padding:20px;">
+            <div id="listaPedidos"></div>
         </div>
     </div>
 </div>
@@ -891,11 +932,7 @@ function cargarGaleriaModelos3D() {
         const card = document.createElement('div');
         card.className = 'modelo-3d-card';
         card.onclick = () => abrirModalModelo(i);
-        card.innerHTML = `
-            <img src="${m.imagen}" alt="${m.nombre}">
-            <h3>${m.nombre}</h3>
-            <p class="precio">$${m.precio} ARS</p>
-        `;
+        card.innerHTML = `<img src="${m.imagen}" alt="${m.nombre}"><h3>${m.nombre}</h3><p class="precio">$${m.precio} ARS</p>`;
         cont.appendChild(card);
     });
 }
@@ -906,23 +943,14 @@ function abrirModalModelo(i) {
     document.getElementById('modalTituloModelo').textContent = m.nombre;
     document.getElementById('modalImagenModelo').src = m.imagen;
     document.getElementById('modalPrecioModelo').textContent = m.precio;
-
-    const specs = document.getElementById('modalEspecificaciones');
-    specs.innerHTML = '';
+    const specs = document.getElementById('modalEspecificaciones'); specs.innerHTML = '';
     for (const [k, v] of Object.entries(m.especificaciones)) {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${k}:</strong> ${v}`;
-        specs.appendChild(li);
+        specs.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
     }
-
-    const det = document.getElementById('modalDetalles');
-    det.innerHTML = '';
+    const det = document.getElementById('modalDetalles'); det.innerHTML = '';
     for (const [k, v] of Object.entries(m.detalles)) {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${k}:</strong> ${v}`;
-        det.appendChild(li);
+        det.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
     }
-
     document.getElementById('modalModelo3D').classList.add('abierto');
     document.body.style.overflow = 'hidden';
 }
@@ -932,6 +960,7 @@ function cerrarModalModelo() {
     document.body.style.overflow = 'auto';
 }
 
+// === CARRITO ===
 function actualizarContadorCarrito() {
     const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
     document.getElementById('cart-count').textContent = carrito.length;
@@ -942,7 +971,6 @@ function abrirModalCarrito() {
     const lista = document.getElementById('cart-items-list');
     lista.innerHTML = '';
     let total = 0;
-
     if (carrito.length === 0) {
         lista.innerHTML = '<p style="text-align:center;color:#777;margin:20px 0">El carrito está vacío</p>';
     } else {
@@ -950,13 +978,7 @@ function abrirModalCarrito() {
             total += item.precio;
             const div = document.createElement('div');
             div.className = 'cart-item';
-            div.innerHTML = `
-                <h4>${item.nombre}</h4>
-                <div>
-                    <p>$${item.precio} ARS</p>
-                    <button onclick="removerDelCarrito(${i})">Eliminar</button>
-                </div>
-            `;
+            div.innerHTML = `<h4>${item.nombre}</h4><div><p>$${item.precio} ARS</p><button onclick="removerDelCarrito(${i})">Eliminar</button></div>`;
             lista.appendChild(div);
         });
     }
@@ -970,9 +992,9 @@ function cerrarModalCarrito() {
     document.body.style.overflow = 'auto';
 }
 
-function removerDelCarrito(index) {
+function removerDelCarrito(i) {
     let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    carrito.splice(index, 1);
+    carrito.splice(i, 1);
     localStorage.setItem('carrito', JSON.stringify(carrito));
     actualizarContadorCarrito();
     abrirModalCarrito();
@@ -990,11 +1012,138 @@ function agregarAlCarritoDesdeModal() {
     if (modeloActualEnModal === null) return;
     const m = modelos3D[modeloActualEnModal];
     let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    carrito.push({ nombre: m.nombre, precio: m.precio });
+    carrito.push({ nombre: m.nombre, precio: m.precio, imagen: m.imagen });
     localStorage.setItem('carrito', JSON.stringify(carrito));
     alert(m.nombre + ' agregado al carrito');
     cerrarModalModelo();
     actualizarContadorCarrito();
+}
+
+// === CHECKOUT Y GUARDADO DE PEDIDO ===
+function abrirCheckout() {
+    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    if (carrito.length === 0) {
+        alert('El carrito está vacío');
+        return;
+    }
+    cerrarModalCarrito();
+    document.getElementById('modalCheckout').classList.add('abierto');
+}
+
+function cerrarCheckout() {
+    document.getElementById('modalCheckout').classList.remove('abierto');
+    document.body.style.overflow = 'auto';
+}
+
+function finalizarCompra() {
+    const nombre = document.getElementById('inputNombre').value.trim();
+    const apellido = document.getElementById('inputApellido').value.trim();
+    const telefono = document.getElementById('inputTelefono').value.trim();
+    const cp = document.getElementById('inputCP').value.trim();
+    const localidad = document.getElementById('inputLocalidad').value.trim();
+
+    if (!nombre || !apellido || !telefono || !cp || !localidad) {
+        alert('Complete todos los campos');
+        return;
+    }
+
+    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    const total = carrito.reduce((sum, item) => sum + item.precio, 0);
+
+    const pedido = {
+        id: Date.now(),
+        fecha: new Date().toLocaleString('es-AR'),
+        cliente: { nombre, apellido, telefono, cp, localidad },
+        productos: carrito,
+        total: total
+    };
+
+    let historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
+    historial.push(pedido);
+    localStorage.setItem('historialPedidos', JSON.stringify(historial));
+    localStorage.removeItem('carrito');
+
+    alert('¡Pedido confirmado! Gracias ' + nombre);
+    cerrarCheckout();
+    actualizarContadorCarrito();
+}
+
+// === ACCESO ADMIN (3 clics en título) ===
+document.getElementById('titulo-secreto').addEventListener('click', () => {
+    clickCount++;
+    if (clickCount === 1) {
+        clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+    } else if (clickCount === 3) {
+        clearTimeout(clickTimer);
+        clickCount = 0;
+        document.getElementById('modalPassword').classList.add('abierto');
+    }
+});
+
+function verificarPassword() {
+    if (document.getElementById('adminPass').value === '080303') {
+        document.getElementById('modalPassword').classList.remove('abierto');
+        mostrarHistorial();
+    } else {
+        alert('Contraseña incorrecta');
+    }
+}
+
+function mostrarHistorial() {
+    const historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
+    const cont = document.getElementById('listaPedidos');
+    cont.innerHTML = '';
+
+    if (historial.length === 0) {
+        cont.innerHTML = '<p style="text-align:center;color:#777;">No hay pedidos aún</p>';
+    } else {
+        historial.forEach(p => {
+            const div = document.createElement('div');
+            div.style = 'background:white;margin:15px 0;padding:15px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);cursor:pointer;';
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <strong>${p.cliente.nombre} ${p.cliente.apellido}</strong>
+                    <small>${p.fecha}</small>
+                </div>
+                <p>Tel: ${p.cliente.telefono} • ${p.cliente.localidad} (${p.cliente.cp}) • Total: $${p.total}</p>
+                <small>${p.productos.length} producto(s)</small>
+                <button onclick="eliminarPedido(${p.id})" style="float:right;background:#e74c3c;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;">Eliminar</button>
+            `;
+            div.onclick = (e) => {
+                if (e.target.tagName === 'BUTTON') return;
+                const detalles = div.querySelector('.detalles') || document.createElement('div');
+                detalles.className = 'detalles';
+                if (detalles.innerHTML) {
+                    detalles.innerHTML = '';
+                    return;
+                }
+                detalles.style = 'margin-top:15px;padding:15px;background:#f8f9fa;border-radius:8px;';
+                let html = '<h4>Productos:</h4>';
+                p.productos.forEach(pr => {
+                    html += `
+                        <div style="display:flex;gap:15px;align-items:center;margin:10px 0;">
+                            <img src="${pr.imagen}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">
+                            <div><strong>${pr.nombre}</strong><br>$${pr.precio} ARS</div>
+                        </div>
+                    `;
+                });
+                detalles.innerHTML = html;
+                div.appendChild(detalles);
+            };
+            cont.appendChild(div);
+        });
+    }
+    document.getElementById('modalHistorial').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+}
+
+function eliminarPedido(id) {
+    if (confirm('¿Eliminar este pedido permanentemente?')) {
+        let historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
+        historial = historial.filter(p => p.id !== id);
+        localStorage.setItem('historialPedidos', JSON.stringify(historial));
+        mostrarHistorial();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
