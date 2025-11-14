@@ -5,13 +5,31 @@
     <title>Modelos 3D - MUNDO 3D</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mol.css">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCtca6GYsf4zvFTxPYaERdDHi-wF6AWOLc",
+  authDomain: "mundo3d-72c5a.firebaseapp.com",
+  projectId: "mundo3d-72c5a",
+  storageBucket: "mundo3d-72c5a.firebasestorage.app",
+  messagingSenderId: "736628567362",
+  appId: "1:736628567362:web:8475898f3f9471f7336cdb",
+  measurementId: "G-C1V1DJ1BRD"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const historialRef = db.ref('pedidos');   
+</script>
 </head>
 <body>
 
 <header class="header-fijo">
     <a href="f1.html" class="boton-volver">
         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
+        Volver
     </a>
     <h1 class="titulo-header" >Modelos 3D - MUNDO 3D</h1>
 
@@ -950,7 +968,6 @@ function cerrarModalModelo() {
     document.body.style.overflow = 'auto';
 }
 
-// === CARRITO ===
 function actualizarContadorCarrito() {
     const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
     document.getElementById('cart-count').textContent = carrito.length;
@@ -1009,7 +1026,6 @@ function agregarAlCarritoDesdeModal() {
     actualizarContadorCarrito();
 }
 
-// === CHECKOUT Y GUARDADO DE PEDIDO ===
 function abrirCheckout() {
     const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
     if (carrito.length === 0) {
@@ -1049,17 +1065,13 @@ function finalizarCompra() {
         total: total
     };
 
-    let historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
-    historial.push(pedido);
-    localStorage.setItem('historialPedidos', JSON.stringify(historial));
-    localStorage.removeItem('carrito');
+    historialRef.push(pedido);
 
+    localStorage.removeItem('carrito');
     alert('¡Pedido confirmado! Gracias ' + nombre);
     cerrarCheckout();
     actualizarContadorCarrito();
 }
-
-// === ACCESO ADMIN: escribir 080303 + Enter ===
 let codigoIngresado = '';
 
 document.addEventListener('keydown', (e) => {
@@ -1077,77 +1089,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-function mostrarHistorial() {
-    const historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
-    const cont = document.getElementById('listaPedidos');
-    cont.innerHTML = '';
 
-    if (historial.length === 0) {
-        cont.innerHTML = '<p style="text-align:center;color:#777;">No hay pedidos aún</p>';
-        return;
-    }
-
-    historial.forEach(p => {
-        const div = document.createElement('div');
-        div.style = 'background:white;margin:15px 0;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);cursor:pointer;';
-
-        div.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <strong style="font-size:1.2rem;">${p.cliente.nombre} ${p.cliente.apellido}</strong>
-                <small style="color:#555;">${p.fecha}</small>
-            </div>
-            <p style="margin:8px 0;color:#333;">
-                Tel: ${p.cliente.telefono} • ${p.cliente.localidad} (${p.cliente.cp})
-            </p>
-            <p style="margin:5px 0;font-weight:bold;color:#006eff;">
-                Total: $${p.total} ARS • ${p.productos.length} producto(s)
-            </p>
-        `;
-
-        div.onclick = (e) => {
-            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'STRONG') return;
-
-            const detalles = div.querySelector('.detalles');
-            if (detalles) {
-                detalles.remove();
-                return;
-            }
-
-            const lista = document.createElement('div');
-            lista.className = 'detalles';
-            lista.style = 'margin-top:15px;padding:15px;background:#f8f9fa;border-radius:8px;border-left:4px solid #006eff;';
-
-            let html = '<strong style="color:#170942;">Productos:</strong><br><br>';
-            p.productos.forEach((pr, idx) => {
-                const indice = modelos3D.findIndex(m => m.nombre === pr.nombre);
-                if (indice !== -1) {
-                    html += `${idx + 1}. <strong style="color:#006eff;cursor:pointer;text-decoration:underline;" 
-                                    onclick="event.stopPropagation(); modeloActualEnModal=${indice}; abrirModalModelo(${indice}); document.getElementById('modalHistorial').classList.remove('abierto'); document.body.style.overflow='hidden';">
-                                    ${pr.nombre}</strong> — $${pr.precio} ARS<br>`;
-                } else {
-                    html += `${idx + 1}. <strong>${pr.nombre}</strong> — $${pr.precio} ARS<br>`;
-                }
-            });
-
-            lista.innerHTML = html;
-
-            const botonEliminar = document.createElement('button');
-            botonEliminar.textContent = 'Eliminar este pedido';
-            botonEliminar.style = 'margin-top:15px;background:#e74c3c;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:bold;';
-            botonEliminar.onclick = (e) => {
-                e.stopPropagation();
-                if (confirm('¿Eliminar este pedido permanentemente?')) {
-                    eliminarPedido(p.id);
-                }
-            };
-
-            lista.appendChild(botonEliminar);
-            div.appendChild(lista);
-        };
-
-        cont.appendChild(div);
-    });
-}
 
 function eliminarPedido(id) {
     if (confirm('¿Eliminar este pedido permanentemente?')) {
