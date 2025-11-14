@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mol.css">
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCtca6GYsf4zvFTxPYaERdDHi-wF6AWOLc",
-  authDomain: "mundo3d-72c5a.firebaseapp.com",
-  projectId: "mundo3d-72c5a",
-  storageBucket: "mundo3d-72c5a.firebasestorage.app",
-  messagingSenderId: "736628567362",
-  appId: "1:736628567362:web:8475898f3f9471f7336cdb",
-  measurementId: "G-C1V1DJ1BRD"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const historialRef = db.ref('pedidos');   
-</script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtca6GYsf4zvFTxPYaERdDHi-wF6AWOLc",
+            authDomain: "mundo3d-72c5a.firebaseapp.com",
+            projectId: "mundo3d-72c5a",
+            storageBucket: "mundo3d-72c5a.firebasestorage.app",
+            messagingSenderId: "736628567362",
+            appId: "1:736628567362:web:8475898f3f9471f7336cdb",
+            measurementId: "G-C1V1DJ1BRD"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const historialRef = db.ref('pedidos');
+    </script>
 </head>
 <body>
 
@@ -31,8 +31,7 @@ const historialRef = db.ref('pedidos');
         </svg>
         Volver
     </a>
-    <h1 class="titulo-header" >Modelos 3D - MUNDO 3D</h1>
-
+    <h1 class="titulo-header">Modelos 3D - MUNDO 3D</h1>
     <div class="cart-container">
         <button id="cart-button" class="boton-carrito">
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
@@ -45,12 +44,10 @@ const historialRef = db.ref('pedidos');
     </div>
 </header>
 
-
 <main class="main-con-header">
     <section class="bienvenida">
         <p>Explorá nuestra galería de modelos 3D</p>
     </section>
-
     <section class="modelos-3d-section" id="modelos">
         <article class="galeria-modelos-3d" id="galeriaModelos3D"></article>
     </section>
@@ -79,11 +76,11 @@ const historialRef = db.ref('pedidos');
         </div>
     </div>
     <a href="mol.html" class="boton-volver">
-    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-    </svg>
-    Volver a Modelos 3D
-</a>
+        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver a Modelos 3D
+    </a>
 </div>
 
 <div id="modalCarrito" class="modal-modelo-3d">
@@ -97,9 +94,7 @@ const historialRef = db.ref('pedidos');
             <div class="cart-total">
                 <strong>Total: $<span id="cart-total-price">0</span> ARS</strong>
             </div>
-            <button onclick="abrirCheckout()" style="display:block;width:100%;margin-top:12px;padding:14px;background:#006eff;color:#fff;border:none;border-radius:8px;font-size:1.1rem;font-weight:600;cursor:pointer;">
-    Proceder a Comprar
-</button>
+            <button onclick="abrirCheckout()">Proceder a Comprar</button>
             <button class="boton-vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
         </div>
     </div>
@@ -112,14 +107,12 @@ const historialRef = db.ref('pedidos');
             <button class="cerrar-modal" onclick="cerrarCheckout()">X</button>
         </div>
         <div class="modal-cuerpo" style="padding:25px;">
-            <input type="text" id="inputNombre" placeholder="Nombre" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
-            <input type="text" id="inputApellido" placeholder="Apellido" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
-            <input type="text" id="inputTelefono" placeholder="Teléfono (ej: 1123456789)" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
-            <input type="text" id="inputCP" placeholder="Código Postal" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
-            <input type="text" id="inputLocalidad" placeholder="Localidad" required style="width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;">
-            <button onclick="finalizarCompra()" style="width:100%;background:#006eff;color:white;padding:14px;border:none;border-radius:8px;margin-top:15px;font-size:1.1rem;cursor:pointer;">
-                Confirmar Pedido
-            </button>
+            <input type="text" id="inputNombre" placeholder="Nombre" required>
+            <input type="text" id="inputApellido" placeholder="Apellido" required>
+            <input type="text" id="inputTelefono" placeholder="Teléfono (ej: 1123456789)" required>
+            <input type="text" id="inputCP" placeholder="Código Postal" required>
+            <input type="text" id="inputLocalidad" placeholder="Localidad" required>
+            <button onclick="finalizarCompra()">Confirmar Pedido</button>
         </div>
     </div>
 </div>
@@ -128,13 +121,13 @@ const historialRef = db.ref('pedidos');
     <div class="modal-contenido" style="max-width:900px;">
         <div class="modal-encabezado">
             <h2>Historial de Pedidos</h2>
-<button class="cerrar-modal" onclick="document.getElementById('modalHistorial').classList.remove('abierto'); document.body.style.overflow = 'auto';">X</button>        </div>
+            <button class="cerrar-modal" onclick="document.getElementById('modalHistorial').classList.remove('abierto');document.body.style.overflow='auto';">X</button>
+        </div>
         <div class="modal-cuerpo" style="padding:20px;">
             <div id="listaPedidos"></div>
         </div>
     </div>
 </div>
-
 <script>
 let modeloActualEnModal = null;
 
@@ -936,7 +929,7 @@ const modelos3D = [
 function cargarGaleriaModelos3D() {
     const cont = document.getElementById('galeriaModelos3D');
     cont.innerHTML = '';
-    modelos3D.forEach((m, i) => {
+    modelos3D.forEach((m,i) => {
         const card = document.createElement('div');
         card.className = 'modelo-3d-card';
         card.onclick = () => abrirModalModelo(i);
@@ -952,13 +945,9 @@ function abrirModalModelo(i) {
     document.getElementById('modalImagenModelo').src = m.imagen;
     document.getElementById('modalPrecioModelo').textContent = m.precio;
     const specs = document.getElementById('modalEspecificaciones'); specs.innerHTML = '';
-    for (const [k, v] of Object.entries(m.especificaciones)) {
-        specs.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
-    }
+    for (const [k,v] of Object.entries(m.especificaciones||{})) specs.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
     const det = document.getElementById('modalDetalles'); det.innerHTML = '';
-    for (const [k, v] of Object.entries(m.detalles)) {
-        det.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
-    }
+    for (const [k,v] of Object.entries(m.detalles||{})) det.innerHTML += `<li><strong>${k}:</strong> ${v}</li>`;
     document.getElementById('modalModelo3D').classList.add('abierto');
     document.body.style.overflow = 'hidden';
 }
@@ -969,19 +958,18 @@ function cerrarModalModelo() {
 }
 
 function actualizarContadorCarrito() {
-    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    const carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
     document.getElementById('cart-count').textContent = carrito.length;
 }
 
 function abrirModalCarrito() {
-    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    const carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
     const lista = document.getElementById('cart-items-list');
     lista.innerHTML = '';
     let total = 0;
-    if (carrito.length === 0) {
-        lista.innerHTML = '<p style="text-align:center;color:#777;margin:20px 0">El carrito está vacío</p>';
-    } else {
-        carrito.forEach((item, i) => {
+    if (carrito.length===0) lista.innerHTML = '<p style="text-align:center;color:#777;">El carrito está vacío</p>';
+    else {
+        carrito.forEach((item,i) => {
             total += item.precio;
             const div = document.createElement('div');
             div.className = 'cart-item';
@@ -1000,9 +988,9 @@ function cerrarModalCarrito() {
 }
 
 function removerDelCarrito(i) {
-    let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    carrito.splice(i, 1);
-    localStorage.setItem('carrito', JSON.stringify(carrito));
+    let carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
+    carrito.splice(i,1);
+    localStorage.setItem('carrito',JSON.stringify(carrito));
     actualizarContadorCarrito();
     abrirModalCarrito();
 }
@@ -1016,22 +1004,19 @@ function vaciarCarrito() {
 }
 
 function agregarAlCarritoDesdeModal() {
-    if (modeloActualEnModal === null) return;
+    if (modeloActualEnModal===null) return;
     const m = modelos3D[modeloActualEnModal];
-    let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    carrito.push({ nombre: m.nombre, precio: m.precio, imagen: m.imagen });
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-    alert(m.nombre + ' agregado al carrito');
+    let carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
+    carrito.push({nombre:m.nombre,precio:m.precio,imagen:m.imagen});
+    localStorage.setItem('carrito',JSON.stringify(carrito));
+    alert(m.nombre+' agregado al carrito');
     cerrarModalModelo();
     actualizarContadorCarrito();
 }
 
 function abrirCheckout() {
-    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    if (carrito.length === 0) {
-        alert('El carrito está vacío');
-        return;
-    }
+    const carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
+    if (carrito.length===0) {alert('El carrito está vacío');return;}
     cerrarModalCarrito();
     document.getElementById('modalCheckout').classList.add('abierto');
     document.body.style.overflow = 'hidden';
@@ -1048,56 +1033,94 @@ function finalizarCompra() {
     const telefono = document.getElementById('inputTelefono').value.trim();
     const cp = document.getElementById('inputCP').value.trim();
     const localidad = document.getElementById('inputLocalidad').value.trim();
-
-    if (!nombre || !apellido || !telefono || !cp || !localidad) {
-        alert('Complete todos los campos');
-        return;
-    }
-
-    const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-    const total = carrito.reduce((sum, item) => sum + item.precio, 0);
-
+    if (!nombre||!apellido||!telefono||!cp||!localidad) {alert('Complete todos los campos');return;}
+    const carrito = JSON.parse(localStorage.getItem('carrito')||'[]');
+    const total = carrito.reduce((s,item)=>s+item.precio,0);
     const pedido = {
         id: Date.now(),
         fecha: new Date().toLocaleString('es-AR'),
-        cliente: { nombre, apellido, telefono, cp, localidad },
+        cliente: {nombre,apellido,telefono,cp,localidad},
         productos: carrito,
         total: total
     };
-
     historialRef.push(pedido);
-
     localStorage.removeItem('carrito');
-    alert('¡Pedido confirmado! Gracias ' + nombre);
+    alert('¡Pedido confirmado! Gracias '+nombre);
     cerrarCheckout();
     actualizarContadorCarrito();
 }
-let codigoIngresado = '';
 
-document.addEventListener('keydown', (e) => {
-    if (e.key >= '0' && e.key <= '9') {
-        codigoIngresado += e.key;
-    } else if (e.key === 'Backspace') {
-        codigoIngresado = codigoIngresado.slice(0, -1);
-    } else if (e.key === 'Enter' && codigoIngresado === '080308') {
+let codigoIngresado = '';
+document.addEventListener('keydown', e => {
+    if (e.key>='0'&&e.key<='9') codigoIngresado += e.key;
+    else if (e.key==='Backspace') codigoIngresado = codigoIngresado.slice(0,-1);
+    else if (e.key==='Enter' && codigoIngresado==='080303') {
         document.getElementById('modalHistorial').classList.add('abierto');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow='hidden';
         mostrarHistorial();
-        codigoIngresado = '';
-    } else {
-        codigoIngresado = '';
-    }
+        codigoIngresado='';
+    } else codigoIngresado='';
 });
 
-
-
-function eliminarPedido(id) {
-    if (confirm('¿Eliminar este pedido permanentemente?')) {
-        let historial = JSON.parse(localStorage.getItem('historialPedidos') || '[]');
-        historial = historial.filter(p => p.id !== id);
-        localStorage.setItem('historialPedidos', JSON.stringify(historial));
-        mostrarHistorial();
-    }
+function mostrarHistorial() {
+    const cont = document.getElementById('listaPedidos');
+    cont.innerHTML = 'Cargando pedidos...';
+    historialRef.once('value').then(snapshot => {
+        const historial = [];
+        snapshot.forEach(child => {
+            const p = child.val();
+            p.firebaseKey = child.key;
+            historial.push(p);
+        });
+        cont.innerHTML = '';
+        if (historial.length===0) {
+            cont.innerHTML = '<p style="text-align:center;color:#777;">No hay pedidos aún</p>';
+            return;
+        }
+        historial.forEach(p => {
+            const div = document.createElement('div');
+            div.style = 'background:white;margin:15px 0;padding:18px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);cursor:pointer;';
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <strong style="font-size:1.2rem;">${p.cliente.nombre} ${p.cliente.apellido}</strong>
+                    <small style="color:#555;">${p.fecha}</small>
+                </div>
+                <p style="margin:8px 0;color:#333;">Tel: ${p.cliente.telefono} • ${p.cliente.localidad} (${p.cliente.cp})</p>
+                <p style="margin:5px 0;font-weight:bold;color:#006eff;">Total: $${p.total} ARS • ${p.productos.length} producto(s)</p>
+            `;
+            div.onclick = e => {
+                if (e.target.tagName==='BUTTON') return;
+                const detalles = div.querySelector('.detalles');
+                if (detalles) {detalles.remove();return;}
+                const lista = document.createElement('div');
+                lista.className = 'detalles';
+                lista.style = 'margin-top:15px;padding:15px;background:#f8f9fa;border-radius:8px;border-left:4px solid #006eff;';
+                let html = '<strong style="color:#170942;">Productos:</strong><br><br>';
+                p.productos.forEach((pr,idx) => {
+                    const i = modelos3D.findIndex(m=>m.nombre===pr.nombre);
+                    if (i!==-1) {
+                        html += `${idx+1}. <strong style="color:#006eff;cursor:pointer;text-decoration:underline;" 
+                            onclick="event.stopPropagation();modeloActualEnModal=${i};abrirModalModelo(${i});document.getElementById('modalHistorial').classList.remove('abierto');document.body.style.overflow='hidden';">
+                            ${pr.nombre}</strong> — $${pr.precio} ARS<br>`;
+                    } else html += `${idx+1}. <strong>${pr.nombre}</strong> — $${pr.precio} ARS<br>`;
+                });
+                const btn = document.createElement('button');
+                btn.textContent = 'Eliminar este pedido';
+                btn.style = 'margin-top:15px;background:#e74c3c;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:bold;';
+                btn.onclick = e => {
+                    e.stopPropagation();
+                    if (confirm('¿Eliminar permanentemente?')) {
+                        historialRef.child(p.firebaseKey).remove();
+                        mostrarHistorial();
+                    }
+                };
+                lista.innerHTML = html;
+                lista.appendChild(btn);
+                div.appendChild(lista);
+            };
+            cont.appendChild(div);
+        });
+    }).catch(() => cont.innerHTML = '<p style="color:red;text-align:center;">Error cargando historial</p>');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
